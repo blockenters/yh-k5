@@ -18,6 +18,8 @@
 - EC2 에 배포 : https://docs.google.com/presentation/d/1Iac3W91CNJJRwkFHVCDlQ5xyCSSlyQ5UmyuE5D4nah4/edit?usp=sharing
 - 스트림릿에서 차트에 한글 나오게 설정하는 방법 : https://luvris2.tistory.com/119
 
+- 앱 대시보드 개발 프로젝트 : https://docs.google.com/presentation/d/1_gN-baMFspcmg2XvooeBcQMLhNMDYA6vtTFGP9EVaFA/edit?usp=sharing
+
 ---
 
 
