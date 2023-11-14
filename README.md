@@ -2,7 +2,6 @@
 
 과정소개 : https://docs.google.com/presentation/d/1uzB13Qjkwcq_LVzKhN9RWsTGrOTd21MkV0jl_catrok/edit?usp=sharing
 
-강의방식 : https://docs.google.com/presentation/d/1f1FX2MCdSDKna9GuZqhKpjBPqTAjoEPzv5qoNTAbrmw/edit#slide=id.p
 
 ---
 
