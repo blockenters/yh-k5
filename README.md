@@ -10,6 +10,17 @@
 
 ---
 
+
+- 웹 대시보드 소개 : https://docs.google.com/presentation/d/1Tf7Kwnlqz20-ls_2syWhFhNesAv3YYgHQ8El8QsowxE/edit?usp=sharing
+- 비주얼 스튜디오 코드에서 Git 연동하는 방법 : https://docs.google.com/presentation/d/16cxS9jEqpik1JJSkw9zQIBFVKrek8nAYZFagIWfJzc4/edit?usp=sharing
+- Git 이란 : https://vision-ai.tistory.com/entry/VCS-Version-Control-System-Git
+- Git 용어와 사용법 : https://docs.google.com/presentation/d/1u-Sj4st6Kco0_6AVvWqwqNVoR8bRcOP3luHGKhwXgKA/edit?usp=sharing
+- EC2 에 배포 : https://docs.google.com/presentation/d/1Iac3W91CNJJRwkFHVCDlQ5xyCSSlyQ5UmyuE5D4nah4/edit?usp=sharing
+- 스트림릿에서 차트에 한글 나오게 설정하는 방법 : https://luvris2.tistory.com/119
+
+---
+
+
 ## 실습 환경 셋팅 
 
 ### 1. Chrome 설치 
