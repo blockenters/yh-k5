@@ -11,6 +11,43 @@
 
 ---
 
+## DB
+
+데이터베이스 설치 : https://docs.google.com/presentation/d/12Xm89yzn-Lk6eacTjSn59hXrB28Ip4waDyPfe29jXDE/edit?usp=sharing
+
+MySQL Workbench 설치 에러시 : https://musclebear.tistory.com/115
+
+강의자료 : https://docs.google.com/presentation/d/1Mm6h023No5t2jb5VYR8fDsjamXuvilSF7mEXt9US71E/edit?usp=sharing
+
+
+RDBMS vs NoSQL : https://vision-ai.tistory.com/entry/RDBMS-vs-NoSQL
+
+온프레미스와 클라우드 : https://vision-ai.tistory.com/entry/On-Premise-%EC%99%80-Cloud-Services
+
+
+- 실습 : https://docs.google.com/presentation/d/1KPZiQNb8MfKb3tdm01CnENI1CoZ0g7Ga1c8yEStVDMo/edit?usp=sharing
+
+- DB 실습 쿼리문 : https://drive.google.com/open?id=1IHGP15up9P9iliMUCLXab6f-wYpEamuG
+
+- DB 실습문제 1 : https://docs.google.com/presentation/d/1AQPMzJvUCoqTvt_PyfdTLvYCx12W2TmEFU8WBAUzS4Y/edit?usp=sharing
+
+- DB 실습문제 2 : https://docs.google.com/presentation/d/1EUJFxMxHrkL9IQl_gIOF5FwitWfvUsrKnpW8vaWzSvs/edit?usp=sharing
+
+- MySQL date time : https://www.tutorialspoint.com/mysql/mysql-date-time-functions.htm
+
+- DB 실습문제 3 : https://docs.google.com/presentation/d/1bJocq81ssqBg6Vcw5UYonitn5nZslBYgY8XZIrQHCfQ/edit?usp=sharing
+
+- DB 실습문제 4 : https://docs.google.com/presentation/d/14hsC9F9mN-aGIclRCshFwoGrxAKnPKOQ_xUEwIkVgXk/edit?usp=sharing
+
+- DB 실습문제 5 : https://docs.google.com/presentation/d/1G15cXjAkUPHqiC8A0dylpeHdSkO-lYUaTbeDJSpaHIo/edit?usp=sharing
+
+- DB 실습문제 6 : https://docs.google.com/presentation/d/1ElLC3O8C6sslxLlmqoydD5OwJgDQGWuAJuWY3Oevey0/edit?usp=sharing
+
+
+
+
+---
+
 
 - 웹 대시보드 소개 : https://docs.google.com/presentation/d/1Tf7Kwnlqz20-ls_2syWhFhNesAv3YYgHQ8El8QsowxE/edit?usp=sharing
 - 비주얼 스튜디오 코드에서 Git 연동하는 방법 : https://docs.google.com/presentation/d/16cxS9jEqpik1JJSkw9zQIBFVKrek8nAYZFagIWfJzc4/edit?usp=sharing
