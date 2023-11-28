@@ -17,6 +17,8 @@
 
 MySQL Workbench 설치 에러시 : https://musclebear.tistory.com/115
 
+MySQL Workbench safe update 해제 방법 : https://www.geeksengine.com/database/manage-table/safe-update.php
+
 강의자료 : https://docs.google.com/presentation/d/1Mm6h023No5t2jb5VYR8fDsjamXuvilSF7mEXt9US71E/edit?usp=sharing
 
 
