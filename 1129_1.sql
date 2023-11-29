@@ -199,12 +199,41 @@ select *
 from books
 where stock_quantity like '__';
 
+-- 1. 
+select *
+from books
+where title like '%stories%';
+
+-- 2. 
+select title, pages
+from books
+order by pages desc
+limit 0, 1;
+
+-- 3.
+select concat( title, ' - ', released_year ) as summary
+from books
+order by released_year desc
+limit 0, 3;
+
+-- 4.
+select title, author_lname
+from books
+where author_lname like '% %' ;
+
+select title, released_year, stock_quantity
+from books
+order by stock_quantity
+limit 0, 3;
 
 
+select title, author_lname
+from books
+order by author_lname asc, title asc;
 
-
-
-
+select upper(concat('my favorite author is ', author_fname, author_lname, '!'))  as yell
+from books
+order by author_lname;
 
 
 
