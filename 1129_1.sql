@@ -235,6 +235,102 @@ select upper(concat('my favorite author is ', author_fname, author_lname, '!')) 
 from books
 order by author_lname;
 
+-- 데이터의 갯수를 세는 함수 count() 
+
+-- books 테이블의 전체 데이터는 몇개???
+select count(*)
+from books;
+
+-- author_lname 컬럼의 전체 데이터갯수는 몇개?? 
+select count( author_lname )
+from books;
+
+-- author_lname은 중복데이터가 있다. 
+-- 따라서, 중복데이터 제거한 유니크한 데이터의 갯수는 몇개??
+select count( distinct author_lname )
+from books;
+
+-- 책 제목에 the 가 들어있는 책은, 몇권입니까?
+select count(*)
+from books
+where title like '%the%';
+
+-- 카테고리컬 데이터의 경우
+-- ~ 별로 묶어서 처리할 수 있다. => group by 키워드!!
+
+-- author_lname 별로, 몇권의 책을 썼는지 권수를 보여주세요.
+
+select author_lname, count(author_lname) as book_count
+from books
+group by author_lname ;
+
+-- 년도별로 각각 몇권의 책이 출간되었는지
+-- 년도와 책의갯수를 보여주세요.
+
+select released_year,  count(released_year) as cnt
+from books
+group by released_year
+order by cnt desc;
+
+-- 최대값 구하는 함수  max()
+-- 페이지수가 가장 많은 책은, 몇페이지 입니까?
+select max(pages)  
+from books;
+
+
+-- 최소값 구하는 함수 min()
+-- 출판년도가 가장 빠른 책은 몇년도 인가??
+select min( released_year )
+from books;
+
+-- 페이지의 최소값과 최대값을 함께 보여주시오. 
+select min(pages) as min , max(pages) as max
+from books;
+
+-- 페이지수가 가장 긴 책의,
+-- 제목과 페이지수를 보여주세요. 
+-- 방법 2 :  Sub Query 서브 쿼리 
+select max(pages)
+from books;
+-- 634 
+
+select *
+from books
+where pages = 634;
+
+select title, pages
+from books
+where pages = ( select max(pages) from books ) ;
+
+
+-- 방법 1
+select title, pages
+from books
+order by pages desc
+limit 0,1;
+
+-- stock_quantity 가 가장 적은 책의 
+-- 책 제목, 작가 fname, 페이지수를 보여주세요.
+select min(stock_quantity)
+from books;
+-- 12 
+
+select title, author_fname, pages
+from books
+where stock_quantity = (select min(stock_quantity) from books);
+
+-- 각 작가의 full_name 별로,
+-- 해당 작가의 최초 책 발간한 년도는 언제인지
+-- 작가의 full_name과 발간년도를 보여주세요. 
+select concat(author_fname, ' ',author_lname) as full_name, min(released_year)
+from books
+group by full_name;
+
+-- 각 작가별(풀 네임별) 자신이 쓴 책중에서 가장 긴 책의 
+-- 페이지수를 보여주세요. (작가 풀네임, 페이지수)
+
+
+
 
 
 
