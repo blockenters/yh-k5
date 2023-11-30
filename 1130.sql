@@ -604,6 +604,126 @@ select *, birthdt + interval 100 day - interval 13 hour + interval 2 month
 from people;
 
 
+-- 유저가 리뷰를 남긴다.
+insert into comments
+(content, createdAt)
+values
+('맛있었어요', now() );
+
+select * 
+from comments;
+
+
+insert into comments
+(content, createdAt)
+values
+('저는 별로 맛이 없습니다.', now() );
+
+select *
+from comments;
+
+
+insert into comments
+(content)
+values
+('줄서서라도 먹습니다.');
+
+-- 수정 
+update comments
+set content = '별로네요', updatedAt = now()
+where id = 1;
+
+update comments
+set content = '별로네요'
+where id = 2;
+
+select *
+from comments;
+
+insert into comments
+(content)
+values
+('겨울엔 호떡이 최고');
+
+update comments
+set content = '호떡 맛있음'
+where id = 5;
+
+
+-- 테이블 여러개를 합쳐서 가져오는 방법!  => join 
+
+select * 
+from customers;
+
+select *
+from orders;
+
+-- 두개 테이블을 하나로 합쳐서 가져오시오.
+select *
+from orders
+join customers
+on orders.customer_id = customers.id ;
+
+-- 테이블 이름을 줄여서 사용하는 방법 
+select *
+from orders as o
+join customers as c
+on o.customer_id = c.id ;
+
+select *
+from orders o
+join customers c
+on o.customer_id = c.id ;
+
+-- 컬럼 이름이 중복이 되면, 중복되지 않도록 변경해준다. 
+select o.id as order_id, o.order_date, o.amount, o.customer_id, 
+		c.id, c.first_name, c.last_name, c.email
+from orders o
+join customers c
+on o.customer_id = c.id ;
+
+-- 위의 조인은, 어느 데이터를 위주로 합친것인가??
+-- 주문 데이터를 위주로 하여, 주문자가 누구인지 오른쪽에 붙인것이다.
+
+-- 예를 들어서, 회원가입은 했는데, 주문을 한번도 안한 사람은,
+-- 위의 데이터에서 확인가능한가?? 
+
+-- 모든 회원 정보를 가져오되, 
+-- 오른쪽에 주문 정보를 붙여서, 주문 안한 사람은 null 이 나오도록
+-- 나타내고 싶다. => left join (right join) 이라고 한다.
+
+select *
+from customers c
+left join orders o 
+on c.id = o.customer_id ;
+
+-- 주문 금액이 600달러보다 큰 사람의 데이터를 가져오시오.
+-- 그사람의 이메일 주소와 이름을 확인할 수 있어야 합니다. 
+select *
+from orders o
+join customers c
+on o.customer_id = c.id
+where o.amount > 600;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
