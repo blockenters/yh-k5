@@ -531,6 +531,98 @@ group by released_year
 order by year ;
 
 
+-- 시간 관련된 처리 방법
+insert into people
+(name, birthdate, birthtime, birthdt)
+values
+('김나나','1990-11-11','10:07:35','1990-11-11 10:07:35'),
+('홍길동','1980-12-25','04:10:42','1980-12-25 04:10:42');
+
+select *
+from people;
+
+-- 날짜 정보만 가져오기
+select * , day(birthdate)
+from people;
+
+select * , dayname(birthdate)
+from people;
+
+select * , dayofweek(birthdate)
+from people;
+
+select * , dayofyear(birthdate)
+from people;
+
+select * , month(birthdate)
+from people;
+
+select * , hour(birthdt), minute(birthdt), second(birthdt)
+from people;
+
+-- db 에 저장된 시간형식을!
+-- 사람이 다루기 쉬운 문자열로 바꾸는 방법 
+
+-- '1990년 11월 11일, 10시 07분 입니다.'
+
+select * , date_format(birthdt, '%Y년 %m월 %d일, %H시 %i분 입니다.' )
+from people;
+
+-- 현재시간을 가져오고 싶을때, now() 함수 이용
+select now();
+
+-- 현재 년월일만 가져오고 싶을때,  
+select curdate();
+
+-- 현재 시분초만 가져오고 싶을때, 
+select curtime();
+
+-- 시간의 차이를 구하는 함수.  datediff() 함수 
+select * , datediff(now(), birthdt)
+from people;
+
+-- date_add() 함수
+select * , date_add(birthdt, interval 100 day)
+from people;
+
+select * , date_add(birthdt, interval 100 hour)
+from people;
+
+select * , date_sub(birthdt, interval 100 day)
+from people;
+
+select * , date_sub(birthdt, interval 100 hour)
+from people;
+
+select *, birthdt + interval 100 day
+from people;
+
+select *, birthdt - interval 50 hour
+from people;
+
+select *, birthdt + interval 100 day - interval 13 hour + interval 2 month
+from people;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
