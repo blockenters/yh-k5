@@ -705,6 +705,113 @@ join customers c
 on o.customer_id = c.id
 where o.amount > 600;
 
+-- 위에서, 이 사람들의 이메일과 주문금액, 주문날짜를 가져오시오.
+select c.email, o.amount, o.order_date
+from orders o
+join customers c
+on o.customer_id = c.id
+where o.amount > 600;
+
+-- 위의 결과를, 주문날짜 내림차순으로 가져오세요.
+select c.email, o.amount, o.order_date
+from orders o
+join customers c
+on o.customer_id = c.id
+where o.amount > 600
+order by order_date desc;
+
+-- 고객 아이디가 36인 사람의 주문 내역(모든 정보)를 가져오시오.
+select *
+from customers c
+left join orders o
+on c.id = o.customer_id
+where c.id = 36;
+
+-- first_name이 'Cobby' 인 사람의 주문내역을 가져오시오.
+select *
+from customers c
+join orders o
+on c.id = o.customer_id
+where c.first_name = 'Cobby';
+
+
+-- first_name에 ty 가 들어가는 사람의 주문내역을 가져오시오.
+select *
+from customers c
+join orders o
+on c.id = o.customer_id
+where c.first_name like '%ty%' ;
+
+-- 주문금액이 300이상이고 500이하인 주문내역을 가져오시오.
+-- 단, 주문한 사람의 이메일 정보도 같이 나와야 합니다. 
+select o.* , c.email
+from orders o 
+join customers c 
+on o.customer_id = c.id
+where o.amount between 300 and 500;
+
+-- 각 고객별로, 주문 수를 나타내시오. 
+-- (고객의 이름과 이메일이 함께 나와야 합니다.)
+select c.first_name, c.last_name, c.email , count(o.customer_id) as order_cnt
+from orders o 
+join customers c
+on o.customer_id = c.id
+group by o.customer_id;
+
+-- 모든 회원정보를 다 나타내고, 주문안한사람은 주문횟수가 0으로 나타나도록
+-- 하고 싶을때 
+select c.first_name, c.last_name, c.email , count(o.customer_id) as order_cnt
+from orders o 
+right join customers c
+on o.customer_id = c.id
+group by o.customer_id;
+
+-- 각 고객별로, 주문 금액 평균이 300달러 이상인 
+-- 데이터만 가져오시오. (사람의 이메일과 이름이 함께 나와야 함)
+select c.first_name, c.last_name, c.email , avg( o.amount ) as avg
+from orders o 
+join customers c
+on o.customer_id = c.id
+group by o.customer_id
+having avg >= 300;
+
+-- 각 고객별로 주문 금액의 최대값을 구하고, 
+-- 이 값이 600달러 이상인 데이터만 가져와서, 
+-- 내림차순으로 정렬하세요. (이름과 이메일 주소도 함께 나와야합니다.)
+
+-- order 테이블의, 주문날짜의 최소값과 최대값을 구하세요. 
+
+-- 2019년 12월 20일부터 2020년 1월 10일 사이에 주문한 사람은
+-- 몇명입니까?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
