@@ -89,14 +89,18 @@ where follower_id = 2;
 -- 유저아이디 2번이 팔로잉하는 사람들의
 -- 포스팅 리스트 가져오기. 25개씩 가져오기. 
 -- 작성자이름, 이미지주소, 좋아요수 
-select *
+select u.username, p.image_url , count(l.id) as like_cnt
 from follows f
 join photos p
 on f.followee_id = p.user_id
 join users u 
 on p.user_id = u.id
+left join likes l 
+on p.id = l.photo_id
 where f.follower_id = 2
-order by p.created_at desc;
+group by p.id
+order by p.created_at desc
+limit 0, 25;
 
 
 
