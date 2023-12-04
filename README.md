@@ -11,6 +11,39 @@
 
 ---
 
+
+## API 서버 개발
+
+- 람다용 파이썬 가상환경 : $conda create -n 가상환경이름 python=3.10 
+
+- API 서버 : https://docs.google.com/presentation/d/1dsCZZ4LjywFe_H5wDFvGe4UVmiB2HiaBIdcmugTQorU/edit?usp=sharing
+
+- Python 으로 MySQL 작업 : https://docs.google.com/presentation/d/1adHZUnwVZ0jA3rAO68K5MnsndpWhl9IR2q_f70wE5bQ/edit?usp=sharing
+
+- 포스트맨 사용법 : https://docs.google.com/presentation/d/1YVJtjcqSCC5Z6zFFE-ix8eugs_uh_vdwZmrvgx5VBKQ/edit?usp=sharing
+
+- JWT 자료 : https://nesoy.github.io/articles/2020-03/JWT
+
+- 포스트맨에서 인증토큰 셋팅하는 방법 : https://docs.google.com/presentation/d/1YVJtjcqSCC5Z6zFFE-ix8eugs_uh_vdwZmrvgx5VBKQ/edit?usp=sharing
+
+- 실습 1 : https://docs.google.com/presentation/d/1QKlMbRgWOUaHxqatJGUetrf-6WSSWqdTpBZqv7FW1t4/edit?usp=sharing
+
+- 서버리스에 aws credential 설정 : https://docs.google.com/presentation/d/1SL3TPsZ0ebqdSRvNXTikP97Qp9jBRJdlspQrjxQGcnQ/edit?usp=sharing
+
+- 실습 2 : https://docs.google.com/presentation/d/16P5E-14EDVCuM3oWA9yWiStA6xZuWJvGjNuzFHdZdrY/edit?usp=sharing
+
+- 컨테이너로 처리 : https://docs.google.com/presentation/d/1AP7DgYipGOHmlNFbPqlZ_j1AmUpTo0h4K1RYphCzH7Y/edit?usp=sharing
+
+- 구글 Vision Api : https://cloud.google.com/vision/docs/drag-and-drop?hl=ko
+
+- aws rekognition 매뉴얼 : https://docs.aws.amazon.com/ko_kr/rekognition/latest/dg/what-is.html
+
+- 오픈 API 사용 : https://docs.google.com/presentation/d/1Sis_PGDrhi61UvU1KrmZCIPVud2qjsaoFe7haKJ4bLY/edit?usp=sharing
+
+- 실습 3 : https://docs.google.com/presentation/d/1wKcb0QAeAdUY4W8YHZZaUhARrmrYMdyWSHvhfNPZZ0U/edit?usp=sharing
+
+---
+
 ## DB
 
 데이터베이스 설치 : https://docs.google.com/presentation/d/12Xm89yzn-Lk6eacTjSn59hXrB28Ip4waDyPfe29jXDE/edit?usp=sharing
