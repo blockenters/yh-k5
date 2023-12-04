@@ -58,11 +58,23 @@ on f.followeeId = u.id
 where f.followerId = 1 and s.date < now() ;
 
 -- 완료 여부를 체크하는 SQL (완료했다)
- 
+update schedule
+set isCompleted = 1
+where id = 41 and userId = 1;
+
 -- 완료 여부를 해제하는 SQL (완료 안했다)
+update schedule
+set isCompleted = 0
+where id = 41 and userId = 1;
+
+select *
+from schedule
+where userId = 1;
 
 -- 위의 둘을, 한번에 처리하는 SQL 
-
+update schedule 
+set isCompleted =  if(isCompleted = 0, 1, 0)
+where id = 41 and userId = 1
 
 
 
