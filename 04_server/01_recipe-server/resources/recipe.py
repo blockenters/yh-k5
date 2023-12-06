@@ -181,9 +181,84 @@ class RecipeResource(Resource) :
             return {'result' : 'success', 
                     'item' : result_list[0] }
 
+    def put(self, recipe_id) :
+
+        # 1. 클라이언트로부터 데이터를 받아온다.
+        
+        # body 에 들어있는 json 데이터.
+        data = request.get_json()
+
+        # 레시피 테이블의 아이디가 저장되어있는 변수 : recipe_id
+
+        # 2. DB 레시피 테이블을 업데이트 한다. 
+        try :
+            connection = get_connection()
+
+            query = '''update recipe
+                        set name = %s ,
+                            description = %s,
+                            num_of_servings = %s,
+                            cook_time = %s, 
+                            directions = %s
+                        where id = %s;'''
+            
+            record = (data['name'] ,
+                      data['description'],
+                      data['num_of_servings'],
+                      data['cook_time'], 
+                      data['directions'],
+                      recipe_id )
+            
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            print(e)
+            cursor.close()
+            connection.close()
+            return {"result" : 'fail', 'error':str(e)} , 500
 
 
+        return {'result' : 'success'} , 200
 
+    
+    
+    ### restful API 에서
+    ### GET, DELETE 메소드는, BODY 에 데이터를 전달하지 않습니다.
+    def delete(self, recipe_id) :
+        
+        # 1. 클라이언트로부터 데이터를 받아온다.
+        #    이미, recipe_id 받아왔음!
+
+        # 2. 테이블에서 해당 레시피를 삭제한다.
+        try :
+            connection = get_connection()
+
+            query = '''delete from recipe
+                        where id = %s;'''
+            record = (recipe_id, )
+
+            cursor = connection.cursor()
+
+            cursor.execute(query, record)
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            print(e) 
+            cursor.close()
+            connection.close()
+            return {'result' : 'fail', 'error' : str(e)}, 500
+
+
+        return {'result' : 'success'} , 200
 
 
 
