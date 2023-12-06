@@ -153,6 +153,7 @@ class RecipeResource(Resource) :
             # fetchall 함수는 항상 결과를 리스트로 리턴한다.
             result_list = cursor.fetchall()
 
+            print('db에서 결과를 가져온다.')
             print(result_list)       
 
             i = 0
@@ -171,9 +172,15 @@ class RecipeResource(Resource) :
             connetion.close()
             return {"result" : "fail", "error" : str(e)}, 500
 
+        # 여기서 리스트에 데이터가 있는경우와 없는 경우로 체크하여
+        # 클라이언트에게 데이터를 보낸다.
+        if len(result_list) == 0 :
+            return {"result" : "fail",
+                    "message" : "해당데이터가 없습니다."}, 400
+        else :
+            return {'result' : 'success', 
+                    'item' : result_list[0] }
 
-        return {'result' : 'success', 
-                'item' : result_list[0] }
 
 
 
