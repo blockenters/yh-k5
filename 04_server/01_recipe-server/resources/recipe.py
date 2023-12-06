@@ -68,6 +68,44 @@ class RecipeListResource(Resource):
         return {"result" : "success"} , 200
 
 
+    def get(self) :
+        # 1. 클라이언트로부터 데이터를 받아온다. 
+        # 없다.
+
+        # 2. 디비에 저장된 데이터를 가져온다.
+        try :
+            
+            connection = get_connection()
+
+            query = '''select * 
+                        from recipe;'''
+            
+            # 중요!!!
+            # Select 문에서!!! 커서를 만들때에는
+            # 파라미터 dictionary = True 로 해준다.
+            # 왜? 리스트와 딕셔너리 형태로 가져오기때문에
+            # 클라이언트에게 JSON 형식으로 보내줄수있다.
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query)
+
+            result_list = cursor.fetchall()
+
+            print(result_list)
+
+            # datetime 은 파이썬에서 사용하는 데이터타입이므로
+            # JSON형식이 아니다. 따라서
+            # JSON은 문자열이나 숫자만 가능하므로
+            # datetime 을 문자열로 바꿔줘야 한다. 
+            
+
+            cursor.close()
+            connection.close()
+
+        except Error as e :
+            pass
+
+        return {"result" : "success", "items" : result_list}, 200
 
 
 
