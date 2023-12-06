@@ -123,6 +123,58 @@ class RecipeListResource(Resource):
         return {"result" : "success", 
                 "items" : result_list,
                 "count" : len(result_list) }, 200
+    
+
+class RecipeResource(Resource) :
+    # Path (경로)에 숫자나 문자가 바뀌면서 처리되는 경우에는
+    # 해당 변수를, 파라미터에 꼭 써줘야 한다. 
+    # 이 변수는, app.py 파일의 addResource 함수에서 사용한 변수!
+    def get(self, recipe_id) :
+        
+        print(recipe_id)
+
+        # 1. 클라이언트로부터 데이터를 받아온다.
+        #    이미 경로에 들어있는, 레시피 아이디를 받아왔다.
+        #    위의 recipe_id 라는 변수에 이미 있다. 
+
+        # 2. DB에서 레시피 아이디에 해당하는 레시피 1개를 가져온다.
+        try :
+            connetion = get_connection()
+
+            query = '''select *
+                        from recipe
+                        where id = %s;'''
+            record = (recipe_id , )            
+
+            cursor = connetion.cursor(dictionary=True)
+
+            cursor.execute(query, record)
+
+            # fetchall 함수는 항상 결과를 리스트로 리턴한다.
+            result_list = cursor.fetchall()
+
+            print(result_list)       
+
+            i = 0
+            for row in result_list :
+                result_list[0]['created_at'] = row['created_at'].isoformat()
+                result_list[0]['updated_at'] = row['updated_at'].isoformat()
+                i = i + 1
+
+
+            cursor.close()
+            connetion.close()
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connetion.close()
+            return {"result" : "fail", "error" : str(e)}, 500
+
+
+        return {'result' : 'success', 
+                'item' : result_list[0] }
+
 
 
 
