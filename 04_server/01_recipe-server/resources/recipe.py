@@ -97,15 +97,32 @@ class RecipeListResource(Resource):
             # JSON형식이 아니다. 따라서
             # JSON은 문자열이나 숫자만 가능하므로
             # datetime 을 문자열로 바꿔줘야 한다. 
-            
+
+            i = 0
+            for row in result_list :
+                result_list[i]['created_at'] = row['created_at'].isoformat()
+                result_list[i]['updated_at'] = row['updated_at'].isoformat()
+                i = i + 1 
+
+            print()
+            print(result_list)
+            print()
+
 
             cursor.close()
             connection.close()
 
         except Error as e :
-            pass
+            print(e)
+            cursor.close()
+            connection.close()
+            # 클라이언트에게 에러라고 보내줘야 한다.
+            return {"result":"fail", "error" : str(e)}, 500
+        
 
-        return {"result" : "success", "items" : result_list}, 200
+        return {"result" : "success", 
+                "items" : result_list,
+                "count" : len(result_list) }, 200
 
 
 
