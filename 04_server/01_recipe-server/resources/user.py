@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask_restful import Resource
 from mysql_connection import get_connection
 from mysql.connector import Error
@@ -133,5 +133,22 @@ class UserLoginResource(Resource):
 
         return {"result" : "success",
                 "access_token" : access_token}, 200
+
+
+jwt_blocklist = set()
+
+class UserLogoutResource(Resource):
+
+    @jwt_required()
+    def delete(self) :
+
+        jti = get_jwt()['jti']
+        print(jti)
+
+        jwt_blocklist.add(jti)
+
+        return {"result" : "success"}, 200
+
+
 
 
