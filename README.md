@@ -26,6 +26,8 @@
 
 - 포스트맨에서 인증토큰 셋팅하는 방법 : https://docs.google.com/presentation/d/1YVJtjcqSCC5Z6zFFE-ix8eugs_uh_vdwZmrvgx5VBKQ/edit?usp=sharing
 
+- 중요! 가상환경에 설치한 라이브러리 : flask flask-restful mysql-connector-python psycopg-binary passlib flask-jwt-extended email-validator
+
 - 실습 1 : https://docs.google.com/presentation/d/1QKlMbRgWOUaHxqatJGUetrf-6WSSWqdTpBZqv7FW1t4/edit?usp=sharing
 
 - 서버리스에 aws credential 설정 : https://docs.google.com/presentation/d/1SL3TPsZ0ebqdSRvNXTikP97Qp9jBRJdlspQrjxQGcnQ/edit?usp=sharing
