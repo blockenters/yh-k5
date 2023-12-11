@@ -1,88 +1,63 @@
-from flask import request
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource
-from mysql_connection import get_connection
+from flask import request
+import mysql.connector
 from mysql.connector import Error
 
-class MemoListResource(Resource) :
+from mysql_connection import get_connection
+
+
+class FollowMemoListResource(Resource):
 
     @jwt_required()
-    def post(self) :
-        
-        data = request.get_json()
+    def get(self):
+
+        # 1. 클라이언트로부터 데이터를 받아온다. 
+
+        ### query params 는, 딕셔너리로 받아오고,
+        ### 없는 키값을 억세스해도 에러 발생하지 않도록
+        ### 딕셔너리의 get 함수를 사용해서 데이터를 받아온다.
+
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
 
         user_id = get_jwt_identity()
 
         try :
             connection = get_connection()
-            query = '''insert into memo
-                    (userId, title, date, content)
-                    values
-                    ( %s, %s, %s, %s);'''
-            record = (user_id,
-                      data['title'],
-                      data['date'],
-                      data['content'])
-            cursor = connection.cursor()
-            cursor.execute(query, record)
-            connection.commit()
-            cursor.close()
-            connection.close()
-
-        except Error as e:
-            print(e)
-            cursor.close()
-            connection.close()
-            return {'error' : str(e)}, 500
-        
-        return {'result' : 'success'}, 200
-    
-
-    @jwt_required()
-    def get(self) :
-
-        user_id = get_jwt_identity()
-
-        # 쿼리스트링 (쿼리 파라미터)를 통해서
-        # 데이터를 받아온다.
-        offset = request.args.get('offset')
-        limit = request.args.get('limit')
-
-        try : 
-            connection = get_connection()
-
-            query = '''select id, title, date, content
-                    from memo
-                    where userId = %s
-                    order by date
-                    limit '''+ str(offset) +''' , '''+ str(limit) +''' ;'''
-            
+            query = '''select m.*, u.nickname
+                    from follow f
+                    join memo m
+                        on f.followeeId = m.userId
+                    join user u 
+                        on m.userId = u.id
+                    where f.followerId = %s
+                    order by date desc
+                    limit '''+ offset +''', '''+ limit +''';'''
             record = (user_id, )
-
             cursor = connection.cursor(dictionary=True)
-
             cursor.execute(query, record)
 
             result_list = cursor.fetchall()
+            print(result_list)
 
             cursor.close()
             connection.close()
 
         except Error as e:
-            print(e)
-            cursor.close()
-            connection.close()
-            return {'error' : str(e)}, 500
-
+            print(e)        
+            return {'result':'fail', 'error':str(e)}, 500
+       
         i = 0
         for row in result_list :
-            result_list[i]['date'] = row['date'].isoformat()
-            i = i + 1            
+            result_list[i]['createdAt'] = row['createdAt'].isoformat()    
+            result_list[i]['updatedAt'] = row['updatedAt'].isoformat()
+            result_list[i]['date'] = row['date'].isoformat()     
+            i = i + 1
 
-
-        return {'result' : 'success',
-                'items' : result_list,
-                'count' : len(result_list)}
+        return {'result':'success' ,
+                'count' : len(result_list),
+                'items' : result_list}
 
 
 class MemoResource(Resource) :
@@ -91,37 +66,36 @@ class MemoResource(Resource) :
     def put(self, memo_id) :
 
         data = request.get_json()
-
-        user_id = get_jwt_identity()
+        userId = get_jwt_identity()
 
         try :
-            connetion = get_connection()
+            connection = get_connection()
+
             query = '''update memo
-                    set title = %s ,
-                        date = %s ,
-                        content = %s
+                    set title = %s , date = %s , content = %s
                     where id = %s and userId = %s;'''
+            
             record = (data['title'],
                       data['date'],
                       data['content'],
-                      memo_id, 
-                      user_id)
+                      memo_id,
+                      userId)
             
-            cursor = connetion.cursor()
-            cursor.execute(query, record)           
-            connetion.commit()
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+
+            connection.commit()
 
             cursor.close()
-            connetion.close()
+            connection.close()
 
         except Error as e:
             print(e)
-            cursor.close()
-            connetion.close()
-            return {'error' : str(e)}, 500
-                
-        return {'result' : 'success'}
-
+            return {'result':'fail', 'error':str(e)}, 500
+        
+        return {'result':'success'}
+    
+    
     @jwt_required()
     def delete(self, memo_id) :
 
@@ -129,8 +103,8 @@ class MemoResource(Resource) :
 
         try :
             connection = get_connection()
-            query = '''delete from memo
-                    where id = %s and userId = %s'''
+            query = '''delete from memo 
+                    where id = %s and userId = %s;'''
             record = (memo_id, user_id)
             cursor = connection.cursor()
             cursor.execute(query, record)
@@ -140,10 +114,77 @@ class MemoResource(Resource) :
 
         except Error as e:
             print(e)
+            return {'result':'fail', 'error':str(e)}, 500
+        
+        return {'result':'success'}
+
+
+class MemoListResource(Resource) :
+    
+    @jwt_required()
+    def post(self) :
+
+        data = request.get_json()
+        user_id = get_jwt_identity()
+
+        try:
+            connection = get_connection()
+            query = '''insert into memo
+                    (title, date, content, userId)
+                    values
+                    (%s, %s ,%s, %s);'''
+            record = ( data['title'], 
+                      data['date'],
+                       data['content'],
+                        user_id )
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+            connection.commit()
+
             cursor.close()
             connection.close()
-            return {'error' : str(e)}, 500
+
+        except Error as e:
+            print(e)
+            return {'result':'fail', 'error':str(e)}, 500
 
         return {'result' : 'success'}
 
+    @jwt_required()
+    def get(self) :
+
+        user_id = get_jwt_identity()
+
+        try :
+            
+            connection = get_connection()
+
+            query = '''select *
+                    from memo
+                    where userId = %s
+                    order by date desc;'''
+            record = (user_id, )
+
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute(query, record)
+
+            result_list = cursor.fetchall()            
+
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+            print(e)
+            return {'result':'fail', 'error':str(e)}, 500
+        
+        i = 0
+        for row in result_list :
+            result_list[i]['createdAt'] = row['createdAt'].isoformat()    
+            result_list[i]['updatedAt'] = row['updatedAt'].isoformat()
+            result_list[i]['date'] = row['date'].isoformat()     
+            i = i + 1
+
+        return {'result' : 'success' , 
+                'count' : len(result_list) , 
+                'items' : result_list}
 
