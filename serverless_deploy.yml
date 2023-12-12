@@ -1,4 +1,4 @@
-ame: Deploy sls app
+name: Deploy sls app
 
 on: 
   push:
