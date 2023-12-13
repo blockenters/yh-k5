@@ -34,6 +34,8 @@
 
 - 실습 2 : https://docs.google.com/presentation/d/16P5E-14EDVCuM3oWA9yWiStA6xZuWJvGjNuzFHdZdrY/edit?usp=sharing
 
+- 실습 2 SQL insert 문 : https://block-edu-test.s3.ap-northeast-2.amazonaws.com/movie_data.zip
+
 - 컨테이너로 처리 : https://docs.google.com/presentation/d/1AP7DgYipGOHmlNFbPqlZ_j1AmUpTo0h4K1RYphCzH7Y/edit?usp=sharing
 
 - 구글 Vision Api : https://cloud.google.com/vision/docs/drag-and-drop?hl=ko
