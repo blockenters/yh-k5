@@ -20,7 +20,6 @@ jobs:
         python-version: '3.10'
     - name: install serverless
       run: npm i -g serverless
-    - run: serverless plugin install -n serverless-wsgi
     - name: severless deploy
       run: sls deploy --verbose --force
 
