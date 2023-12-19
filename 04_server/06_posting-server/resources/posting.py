@@ -74,6 +74,8 @@ class PostingListResource(Resource) :
             cursor = connection.cursor()
             cursor.execute(query, record)
 
+            posting_id = cursor.lastrowid
+
             # 2. tag_name 테이블 처리를 해준다.
             #    리코그니션을 이용해서 받아온 label이,
             #    tag_name테이블에 이미 존재하면, 
@@ -108,14 +110,17 @@ class PostingListResource(Resource) :
 
                     tag_name_id = cursor.lastrowid
 
-            # 3. 위의 태그네임 아이디와, 포스팅 아이디를
-            #    이용해서, tag 테이블에 데이터를 넣어준다.   
-
-
-
-
+                # 3. 위의 태그네임 아이디와, 포스팅 아이디를
+                #    이용해서, tag 테이블에 데이터를 넣어준다.   
             
+                query = '''insert into tag
+                        (postingId, tagNameId)
+                        values
+                        (%s, %s);'''
+                record = (posting_id, tag_name_id)
 
+                cursor = connection.cursor()
+                cursor.execute(query, record)                            
             
             # 트랜잭션 처리를 위해서
             # 커밋은 테이블 처리를 다 하고나서
@@ -125,11 +130,17 @@ class PostingListResource(Resource) :
             # 된다. 이 기능을 트랜잭션 이라고 한다.
             connection.commit()
 
+            cursor.close()
+            connection.close()
+
         except Error as e:
-            pass
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'error' : str(e)}, 500
 
 
-        return
+        return {'result' : 'success'}, 200
     
 
 
