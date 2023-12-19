@@ -143,8 +143,6 @@ class PostingListResource(Resource) :
         return {'result' : 'success'}, 200
     
 
-
-
     def detect_labels(self, photo, bucket):
 
         client = boto3.client('rekognition',
@@ -173,4 +171,53 @@ class PostingListResource(Resource) :
             
 
         return label_list
+
+    @jwt_required()
+    def get(self) :
+
+        user_id = get_jwt_identity()
+
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
+
+        try :
+            connection = get_connection()
+            query = '''select p.id postId, p.imgUrl, p.content,
+                            u.id userId, u.email, 
+                            p.createdAt, 
+                            count(l.id) as likeCnt, 
+                            if(l2.id is null, 0, 1) as isLike
+                    from follow f 
+                    join posting p 
+                    on f.followeeId = p.userId
+                    join user u 
+                    on p.userId = u.id
+                    left join `like` l
+                    on p.id = l.postingId
+                    left join `like` l2
+                    on p.id = l2.postingId and l2.userId = %s
+                    where f.followerId = %s
+                    group by p.id
+                    order by p.createdAt desc
+                    limit '''+offset+''', '''+limit+''';'''
+            
+            record = (user_id, user_id)
+
+            cursor = connection.cursor(dictionary=True)  
+            cursor.execute(query, record)
+
+            result_list = cursor.fetchall()
+
+            cursor.close()
+            connection.close()
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'error' : str(e)}, 500
+        
+        print(result_list)
+
+        return
 

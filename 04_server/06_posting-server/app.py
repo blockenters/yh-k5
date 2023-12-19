@@ -2,6 +2,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager 
 from flask_restful import Api
 from config import Config
+from resources.follow import FollowResource
 from resources.posting import PostingListResource
 from resources.user import UserLoginResource, UserLogoutResource, UserRegisterResource, jwt_blocklist
 
@@ -26,6 +27,7 @@ api.add_resource( UserRegisterResource , '/user/register')
 api.add_resource( UserLoginResource, '/user/login')
 api.add_resource( UserLogoutResource , '/user/logout')
 api.add_resource( PostingListResource , '/posting')
+api.add_resource( FollowResource , '/follow/<int:followee_id>')
 
 if __name__ == '__main__':
     app.run()
