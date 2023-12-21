@@ -22,6 +22,8 @@
 
 - 안드로이드 애니메이션 오픈소스 라이브러리 : https://github.com/daimajia/AndroidViewAnimations
 
+- UI : https://docs.google.com/presentation/d/1gu_ucVXElTSTjUYg2UnKIl50RjNwdPmTvd00uGyOE1Y/edit?usp=sharing
+
 - 실습 1 : https://docs.google.com/presentation/d/1POAPZf0juVnhXe2MnZTE0YaeUMlk7SHC2j9-4IdPbus/edit?usp=sharing
 
 - 실습 2 : https://docs.google.com/presentation/d/1iF3dxBLcCB_CTZEVPRuIMa01HtsYiZmTYcqvUOSFI1E/edit?usp=sharing
