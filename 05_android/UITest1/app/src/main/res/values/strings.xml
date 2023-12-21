@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">UITest1</string>
+    <string name="txt_hello">Hello~~~</string>
+</resources>
