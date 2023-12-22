@@ -3,6 +3,7 @@ package com.block.quizapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     TextView txtResult;
     Button btnTrue;
     Button btnFalse;
+
+    ArrayList<Quiz> quizArrayList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +43,50 @@ public class MainActivity extends AppCompatActivity {
         //  => 객체를 생성한다. => 메모리에 공간 확보
         setQuiz();
 
+        // 1번 퀴즈 문제를 화면에 보여준다.
+        Quiz quiz = quizArrayList.get(0);
+        txtQuiz.setText( quiz.question  );
+
+        // 프로그레스바를 하나 증가시켜준다.
+        progressBar.setProgress(1);
+        
+        // 참 버튼 눌렀을때 처리
+        btnTrue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 현재 문제의 정답을 가져온다.
+                Quiz quiz = quizArrayList.get(0);
+                
+                if( quiz.answer == true){
+                    // 화면에 "정답입니다" 보여준다.
+                    txtResult.setText("정답입니다.");
+                }else{
+                    // 화면에 "오답입니다" 보여준다.
+                    txtResult.setText("오답입니다.");
+                }
+                
+            }
+        });
+        
+        // 거짓 버튼 눌렀을때 처리
+        btnFalse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Quiz quiz = quizArrayList.get(0);
+                if(quiz.answer == false){
+                    txtResult.setText("정답입니다.");
+                }else{
+                    txtResult.setText("오답입니다.");
+                }
+            }
+        });
+
+
     }
 
 
     void setQuiz(){
-        ArrayList<Quiz> quizArrayList = new ArrayList<>();
+
 
         Quiz q = new Quiz(R.string.q1, true);
         quizArrayList.add(q);
