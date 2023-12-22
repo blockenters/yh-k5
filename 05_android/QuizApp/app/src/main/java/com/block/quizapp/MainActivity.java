@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Quiz> quizArrayList = new ArrayList<>();
 
+    int currentIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +46,18 @@ public class MainActivity extends AppCompatActivity {
         setQuiz();
 
         // 1번 퀴즈 문제를 화면에 보여준다.
-        Quiz quiz = quizArrayList.get(0);
+        Quiz quiz = quizArrayList.get(currentIndex);
         txtQuiz.setText( quiz.question  );
 
         // 프로그레스바를 하나 증가시켜준다.
-        progressBar.setProgress(1);
+        progressBar.setProgress(currentIndex+1);
         
         // 참 버튼 눌렀을때 처리
         btnTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 현재 문제의 정답을 가져온다.
-                Quiz quiz = quizArrayList.get(0);
+                Quiz quiz = quizArrayList.get(currentIndex);
                 
                 if( quiz.answer == true){
                     // 화면에 "정답입니다" 보여준다.
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                     // 화면에 "오답입니다" 보여준다.
                     txtResult.setText("오답입니다.");
                 }
+
+                getNextQuestion();
                 
             }
         });
@@ -72,16 +76,30 @@ public class MainActivity extends AppCompatActivity {
         btnFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Quiz quiz = quizArrayList.get(0);
+                Quiz quiz = quizArrayList.get(currentIndex);
                 if(quiz.answer == false){
                     txtResult.setText("정답입니다.");
                 }else{
                     txtResult.setText("오답입니다.");
                 }
+
+                getNextQuestion();
+
             }
         });
 
 
+    }
+
+    private void getNextQuestion() {
+        // 그다음 문제 제출
+
+        currentIndex = currentIndex + 1;
+
+        Quiz quiz = quizArrayList.get(currentIndex);
+        txtQuiz.setText( quiz.question );
+        // 프로그레스바도 하나 증가
+        progressBar.setProgress(currentIndex+1);
     }
 
 
