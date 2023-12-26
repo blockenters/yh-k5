@@ -21,6 +21,8 @@ public class AvataActivity extends AppCompatActivity {
 
     boolean isSelected = false;
 
+    String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,8 @@ public class AvataActivity extends AppCompatActivity {
         btnRabbit = findViewById(R.id.btnRabbit);
         btnTurtle = findViewById(R.id.btnTurtle);
         btnOk = findViewById(R.id.btnOk);
+
+        email = getIntent().getStringExtra("email");
 
         btnRabbit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +80,7 @@ public class AvataActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //다음 액티비티를 실행한다.
                 Intent intent = new Intent(AvataActivity.this, WelcomeActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
             }
         });

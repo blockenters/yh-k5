@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 // 두번째 액티비티를 실행한다.
 
                 Intent intent = new Intent(MainActivity.this, AvataActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
 
                 finish();
