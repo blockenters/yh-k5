@@ -2,6 +2,7 @@ package com.block.welcomeapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
                 // 모두 정상이니까,
                 // 두번째 액티비티를 실행한다.
 
+                Intent intent = new Intent(MainActivity.this, AvataActivity.class);
+                startActivity(intent);
+
+                finish();
 
             }
         });

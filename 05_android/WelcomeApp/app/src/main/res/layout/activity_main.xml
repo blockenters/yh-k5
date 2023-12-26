@@ -21,15 +21,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="108dp"
         android:layout_marginStart="33dp"
         android:layout_marginTop="68dp"
         android:layout_marginEnd="17dp"
         app:layout_constraintEnd_toStartOf="@+id/editEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@drawable/turtle" />
 
     <EditText
         android:id="@+id/editEmail"
