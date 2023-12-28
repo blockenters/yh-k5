@@ -37,13 +37,9 @@ public class MainActivity extends AppCompatActivity {
                         public void onActivityResult(ActivityResult o) {
 
                             if(o.getResultCode() == 100){
-                                String name = o.getData().getStringExtra("name");
-                                String phone = o.getData().getStringExtra("phone");
 
-                                Log.i("AAA" , name + " , " + phone);
-
-                                Contact contact = new Contact(name, phone);
-
+                                Contact contact = (Contact) o.getData().getSerializableExtra("contact");
+                        
                                 contactArrayList.add(contact);
 
                                 adapter.notifyDataSetChanged();

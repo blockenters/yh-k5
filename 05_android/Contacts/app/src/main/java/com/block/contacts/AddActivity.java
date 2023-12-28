@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.block.contacts.model.Contact;
+
 public class AddActivity extends AppCompatActivity {
 
     EditText editName;
@@ -39,8 +41,11 @@ public class AddActivity extends AppCompatActivity {
 
                 // 메인액티비티로 데이터를 돌려준다.
                 Intent intent = new Intent();
-                intent.putExtra("name", name);
-                intent.putExtra("phone", phone);
+
+                // 데이터를 묶어서 한번에 보내자.
+                Contact contact = new Contact(name, phone);
+                intent.putExtra("contact", contact);
+
                 setResult(100, intent);
 
                 Toast.makeText(AddActivity.this,
