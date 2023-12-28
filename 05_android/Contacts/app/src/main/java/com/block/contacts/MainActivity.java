@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contactArrayList = new ArrayList<>();
 
 
-    // 애드액티비티로부터 데이터 받는 코드
-    ActivityResultLauncher<Intent> launcher =
+    // 애드액티비티 / 업데이트액티비티 로부터 데이터 받는 코드
+    public ActivityResultLauncher<Intent> launcher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>() {
                         @Override
@@ -45,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
                                 Contact contact = new Contact(name, phone);
 
                                 contactArrayList.add(contact);
+
+                                adapter.notifyDataSetChanged();
+
+                            } else if (o.getResultCode() == 200){
+                                String name = o.getData().getStringExtra("name");
+                                String phone = o.getData().getStringExtra("phone");
+                                int index = o.getData().getIntExtra("index", 0);
+
+                                Contact contact = new Contact(name, phone);
+
+                                contactArrayList.set( index , contact);
 
                                 adapter.notifyDataSetChanged();
 
@@ -79,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
     }
+
+
 }
 
 

@@ -1,6 +1,8 @@
 package com.block.contacts.model;
 
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
 
     public String name;
     public String phone;

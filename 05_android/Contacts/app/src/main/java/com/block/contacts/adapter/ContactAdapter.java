@@ -1,6 +1,7 @@
 package com.block.contacts.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.block.contacts.MainActivity;
 import com.block.contacts.R;
+import com.block.contacts.UpdateActivity;
 import com.block.contacts.model.Contact;
 
 import java.util.ArrayList;
@@ -52,6 +56,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         TextView txtName;
         TextView txtPhone;
         ImageView imgDelete;
+        CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +64,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             txtName = itemView.findViewById(R.id.txtName);
             txtPhone = itemView.findViewById(R.id.txtPhone);
             imgDelete = itemView.findViewById(R.id.imgDelete);
+            cardView = itemView.findViewById(R.id.cardView);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 새로운  UpdateActivity 를 실행한다.
+
+                    Intent intent = new Intent(context, UpdateActivity.class);
+                    
+                    // 1. index 
+                    // 2. 이름
+                    // 3. 전번
+                    int index = getAdapterPosition();
+                    Contact contact = contactArrayList.get(index);
+
+                    intent.putExtra("index", index );
+                    intent.putExtra("name", contact.name );
+                    intent.putExtra("phone", contact.phone);
+
+                    ((MainActivity)context).launcher.launch(intent); 
+
+                }
+            });
 
         }
     }
