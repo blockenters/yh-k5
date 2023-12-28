@@ -82,8 +82,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     Contact contact = contactArrayList.get(index);
 
                     intent.putExtra("index", index );
-                    intent.putExtra("name", contact.name );
-                    intent.putExtra("phone", contact.phone);
+
+                    intent.putExtra("contact", contact);
 
                     ((MainActivity)context).launcher.launch(intent);
 

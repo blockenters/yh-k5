@@ -31,12 +31,12 @@ public class UpdateActivity extends AppCompatActivity {
         editPhone = findViewById(R.id.editPhone);
         btnSave = findViewById(R.id.btnSave);
 
-        String name = getIntent().getStringExtra("name");
-        String phone = getIntent().getStringExtra("phone");
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+
         index = getIntent().getIntExtra("index", 0);
 
-        editName.setText(name);
-        editPhone.setText(phone);
+        editName.setText(contact.name);
+        editPhone.setText(contact.phone);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,8 +53,11 @@ public class UpdateActivity extends AppCompatActivity {
 
                 // 메인 액티비티로 데이터를 돌려줘야 한다.
                 Intent intent = new Intent();
-                intent.putExtra("name", name);
-                intent.putExtra("phone", phone);
+
+                Contact contact = new Contact(name, phone);
+
+                intent.putExtra("contact", contact);
+
                 intent.putExtra("index", index);
                 setResult(200, intent);
 

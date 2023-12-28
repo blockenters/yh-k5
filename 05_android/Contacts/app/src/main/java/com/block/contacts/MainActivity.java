@@ -39,17 +39,16 @@ public class MainActivity extends AppCompatActivity {
                             if(o.getResultCode() == 100){
 
                                 Contact contact = (Contact) o.getData().getSerializableExtra("contact");
-                        
+
                                 contactArrayList.add(contact);
 
                                 adapter.notifyDataSetChanged();
 
                             } else if (o.getResultCode() == 200){
-                                String name = o.getData().getStringExtra("name");
-                                String phone = o.getData().getStringExtra("phone");
-                                int index = o.getData().getIntExtra("index", 0);
 
-                                Contact contact = new Contact(name, phone);
+                                Contact contact = (Contact) o.getData().getSerializableExtra("contact");
+
+                                int index = o.getData().getIntExtra("index", 0);
 
                                 contactArrayList.set( index , contact);
 
