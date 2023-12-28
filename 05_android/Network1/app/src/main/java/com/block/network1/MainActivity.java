@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +50,23 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
 
                         Log.i("AAA", response.toString());
+
+                        try {
+                            int userId = response.getJSONObject(0).getInt("userId");
+                            int id = response.getJSONObject(0).getInt("id");
+                            String title = response.getJSONObject(0).getString("title");
+                            String body = response.getJSONObject(0).getString("body");
+
+                            txtUserId.setText(""+userId);
+                            txtId.setText(""+id);
+                            txtTitle.setText(title);
+                            txtBody.setText(body);
+
+                        } catch (JSONException e) {
+                            Toast.makeText(MainActivity.this,
+                                    "네트워크 파싱 에러입니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                     }
                 },
