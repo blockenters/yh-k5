@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Employee> employeeArrayList = new ArrayList<>();
 
 
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+    public ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
                     if ( o.getResultCode() == 100 ) {
                         Employee employee = (Employee) o.getData().getSerializableExtra("employee");
                         employeeArrayList.add(0, employee);
+                        adapter.notifyDataSetChanged();
+                    }else if(o.getResultCode() == 200){
+
+                        int index = o.getData().getIntExtra("index", 0);
+                        Employee employee = (Employee) o.getData().getSerializableExtra("employee");
+
+                        employeeArrayList.set(index , employee);
                         adapter.notifyDataSetChanged();
                     }
                 }
