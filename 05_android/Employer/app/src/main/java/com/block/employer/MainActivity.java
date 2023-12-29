@@ -1,8 +1,16 @@
 package com.block.employer;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -12,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.block.employer.adapter.EmployeeAdapter;
 import com.block.employer.model.Employee;
 
 import org.json.JSONArray;
@@ -26,7 +35,24 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
 
+    RecyclerView recyclerView;
+    EmployeeAdapter adapter;
     ArrayList<Employee> employeeArrayList = new ArrayList<>();
+
+
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    if ( o.getResultCode() == 100 ) {
+                        Employee employee = (Employee) o.getData().getSerializableExtra("employee");
+                        employeeArrayList.add(0, employee);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+    );
 
 
     @Override
@@ -36,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
         btnAdd = findViewById(R.id.btnAdd);
         progressBar = findViewById(R.id.progressBar);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                launcher.launch(intent);
+            }
+        });
 
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
@@ -46,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        progressBar.setVisibility(View.GONE);
 
                         try {
                             JSONArray data = response.getJSONArray("data");
@@ -64,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             // 화면에 표시
+                            adapter = new EmployeeAdapter(MainActivity.this, employeeArrayList);
+                            recyclerView.setAdapter(adapter);
 
                         } catch (JSONException e) {
                             // 유저한테 알린다.
@@ -76,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
         );

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.block.employer.R;
 import com.block.employer.model.Employee;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
@@ -40,7 +41,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         Employee employee = employeeArrayList.get(position);
         holder.txtName.setText(employee.name);
         holder.txtAge.setText( "나이 : "+employee.age+"세" );
-        holder.txtSalary.setText("연봉 : $"+employee.salary);
+
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        String strSalary = decimalFormat.format(employee.salary);
+
+        holder.txtSalary.setText("연봉 : $"+strSalary);
     }
 
     @Override
