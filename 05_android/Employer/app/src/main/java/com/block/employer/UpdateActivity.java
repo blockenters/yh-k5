@@ -1,9 +1,12 @@
 package com.block.employer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +30,9 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+
+        getSupportActionBar().setTitle("직원 수정");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtName = findViewById(R.id.txtName);
         editAge = findViewById(R.id.editAge);
@@ -71,6 +77,51 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.update, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.menuSave){
+
+            String strAge = editAge.getText().toString().trim();
+            String strSalary = editSalary.getText().toString().trim();
+
+            if(strAge.isEmpty() || strSalary.isEmpty()){
+                Toast.makeText(UpdateActivity.this,
+                        "필수항목 모두 입력하세요.",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            int age = Integer.parseInt(strAge);
+            int salary = Integer.parseInt(strSalary);
+
+            employee.age =  age;
+            employee.salary =  salary;
+
+            Intent intent = new Intent();
+            intent.putExtra("index", index);
+            intent.putExtra("employee", employee);
+            setResult(200, intent);
+
+            finish();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
