@@ -1,6 +1,7 @@
 package com.block.employer.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,7 +95,34 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 }
             });
 
+            imgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 알러트 다이얼로그 띄운다.
+                    showAlertDialog();
+                }
+            });
+
         }
+
+
+        private void showAlertDialog(){
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setCancelable(false);
+            builder.setTitle("삭제");
+            builder.setMessage("삭제하시겠습니까?");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    int index = getAdapterPosition();
+                    employeeArrayList.remove(index);
+                    notifyDataSetChanged();
+                }
+            });
+            builder.setNegativeButton("NO", null);
+            builder.show();
+        }
+
     }
 }
 

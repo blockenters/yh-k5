@@ -4,12 +4,15 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setTitle("직원 리스트");
 
         btnAdd = findViewById(R.id.btnAdd);
         progressBar = findViewById(R.id.progressBar);
@@ -129,6 +134,29 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         queue.add(request);
+    }
+
+
+    // 액션바의 메뉴 아이콘이 나오도록 설정하는 함수
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    // 액션바의 메뉴 아이콘 클릭하면, 동작하는 함수
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if( item.getItemId() == R.id.menuAdd ){
+
+            Intent intent = new Intent(MainActivity.this, AddActivity.class);
+            launcher.launch(intent);
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
