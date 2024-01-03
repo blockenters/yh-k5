@@ -3,6 +3,7 @@ package com.block.papagoapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -161,7 +162,9 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         if(itemId == R.id.menuHistory){
-            
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            intent.putExtra("historyArrayList", historyArrayList);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

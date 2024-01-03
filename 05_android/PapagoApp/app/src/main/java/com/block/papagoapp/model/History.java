@@ -1,6 +1,8 @@
 package com.block.papagoapp.model;
 
-public class History {
+import java.io.Serializable;
+
+public class History implements Serializable {
 
     public String sentence;
     public String result;
