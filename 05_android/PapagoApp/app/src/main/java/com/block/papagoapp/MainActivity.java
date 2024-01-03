@@ -1,8 +1,11 @@
 package com.block.papagoapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +21,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.block.papagoapp.config.Config;
+import com.block.papagoapp.model.History;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +37,17 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     TextView txtResult;
 
+    String sentence;
+    String target;
+    ArrayList<History> historyArrayList = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().setTitle("번역하기");
 
         radioGroup = findViewById(R.id.radioGroup);
         editText = findViewById(R.id.editText);
@@ -47,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 1. 어떤 언어로 번역할지의 정보를 가져온다.
                 int radioButtonId = radioGroup.getCheckedRadioButtonId();
-                String target = "";
+
                 if(radioButtonId == R.id.radioBtn1){
                     // 영어
                     target = "en";
@@ -68,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // 2. 번역할 문장을 가져온다.
-                String sentence = editText.getText().toString().trim();
+                sentence = editText.getText().toString().trim();
                 if(sentence.isEmpty()){
                     Toast.makeText(MainActivity.this,
                             "문장을 입력하세요.",
@@ -105,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     txtResult.setText(result);
 
+                                    History history = new History(sentence, result, target);
+                                    historyArrayList.add(0, history);
+
                                 } catch (JSONException e) {
                                     // 유저한테 알리고
                                     return;
@@ -132,6 +147,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int itemId = item.getItemId();
+
+        if(itemId == R.id.menuHistory){
+            
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
