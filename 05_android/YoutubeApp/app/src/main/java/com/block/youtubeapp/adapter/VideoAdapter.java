@@ -1,6 +1,8 @@
 package com.block.youtubeapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,29 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             imgPhoto = itemView.findViewById(R.id.imgPhoto);
             cardView = itemView.findViewById(R.id.cardView);
 
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // url 을 만든다.
+                    int index = getAdapterPosition();
+                    Video video = videoArrayList.get(index);
+
+                    String url = "https://www.youtube.com/watch?v=" + video.videoId;
+
+                    // 웹페이지 여는 함수 호출
+
+                    openWebPage(url);
+                }
+            });
+
+        }
+
+        // 웹브라우저를 실행시키는 함수
+        void openWebPage(String url) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(intent);
         }
     }
 }

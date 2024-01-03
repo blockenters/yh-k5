@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
     // 처음에 데이터를 가져올때 호출.
     private void getNetworkData() {
 
+
         progressBar.setVisibility(View.VISIBLE);
 
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
@@ -188,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         progressBar.setVisibility(View.GONE);
+
+                        videoArrayList.clear();
+                        pageToken = "";
 
                         try {
 
