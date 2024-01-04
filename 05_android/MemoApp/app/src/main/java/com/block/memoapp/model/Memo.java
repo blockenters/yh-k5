@@ -2,6 +2,7 @@ package com.block.memoapp.model;
 
 public class Memo {
 
+    public int id;
     public String title;
     public String date;
     public String content;

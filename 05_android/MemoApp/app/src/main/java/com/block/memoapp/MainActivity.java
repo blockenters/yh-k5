@@ -9,12 +9,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.block.memoapp.api.MemoApi;
+import com.block.memoapp.api.NetworkClient;
 import com.block.memoapp.config.Config;
+import com.block.memoapp.model.Memo;
+import com.block.memoapp.model.MemoList;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     Button btnAdd;
+
+    // 페이징 처리를 위한 변수들
+    int offset = 0;
+    int limit = 7;
+
+    // 리사이클러뷰 관련 변수들
+
+    ArrayList<Memo> memoArrayList = new ArrayList<>();
 
 
     @Override
@@ -54,5 +73,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getNetworkData();
+
+    }
+
+    private void getNetworkData(){
+
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);
+
+        MemoApi api = retrofit.create(MemoApi.class);
+
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        String token = sp.getString("token", "");
+
+        Call<MemoList> call = api.getMemoList(token, offset, limit);
+
+        call.enqueue(new Callback<MemoList>() {
+            @Override
+            public void onResponse(Call<MemoList> call, Response<MemoList> response) {
+                progressBar.setVisibility(View.GONE);
+
+                if(response.isSuccessful()){
+
+                    MemoList memoList = response.body();
+
+                    memoArrayList.addAll( memoList.items );
+
+
+
+
+                }else{
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MemoList> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }
