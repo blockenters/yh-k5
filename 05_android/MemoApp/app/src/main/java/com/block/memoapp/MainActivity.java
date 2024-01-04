@@ -1,6 +1,8 @@
 package com.block.memoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.block.memoapp.adapter.MemoAdapter;
 import com.block.memoapp.api.MemoApi;
 import com.block.memoapp.api.NetworkClient;
 import com.block.memoapp.config.Config;
@@ -32,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     int limit = 7;
 
     // 리사이클러뷰 관련 변수들
-
+    RecyclerView recyclerView;
+    MemoAdapter adapter;
     ArrayList<Memo> memoArrayList = new ArrayList<>();
 
 
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         btnAdd = findViewById(R.id.btnAdd);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
         String token = sp.getString("token", "");
+        token = "Bearer " + token;
 
         Call<MemoList> call = api.getMemoList(token, offset, limit);
 
@@ -99,7 +107,9 @@ public class MainActivity extends AppCompatActivity {
 
                     memoArrayList.addAll( memoList.items );
 
-
+                    // 어댑터 만들어서, 리사이클러뷰에 적용
+                    adapter = new MemoAdapter(MainActivity.this, memoArrayList);
+                    recyclerView.setAdapter(adapter);
 
 
                 }else{
