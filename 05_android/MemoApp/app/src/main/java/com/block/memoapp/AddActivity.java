@@ -3,15 +3,32 @@ package com.block.memoapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.block.memoapp.api.MemoApi;
+import com.block.memoapp.api.NetworkClient;
+import com.block.memoapp.config.Config;
+import com.block.memoapp.model.Memo;
+import com.block.memoapp.model.Res;
 
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -20,6 +37,9 @@ public class AddActivity extends AppCompatActivity {
     Button btnTime;
     EditText editContent;
     Button btnSave;
+
+    String date = "";
+    String time = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +80,7 @@ public class AddActivity extends AppCompatActivity {
                                     strDay = "" + i2;
                                 }
 
-                                String date = i + "-" + strMonth + "-" + strDay;
+                                date = i + "-" + strMonth + "-" + strDay;
 
                                 btnDate.setText(date);
 
@@ -82,6 +102,22 @@ public class AddActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                                String strHour;
+                                if(i < 10){
+                                    strHour = "0" + i;
+                                }else {
+                                    strHour = "" + i;
+                                }
+
+                                String strMin;
+                                if(i1 < 10){
+                                    strMin = "0" + i1;
+                                }else{
+                                    strMin = "" + i1;
+                                }
+
+                                time = strHour + ":" + strMin;
+                                btnTime.setText(time);
 
                             }
                         },
@@ -93,7 +129,80 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String title = editTitle.getText().toString().trim();
+                String content = editContent.getText().toString().trim();
+                String datetime = date + " " + time;
+
+                if(title.isEmpty() || content.isEmpty() || date.isEmpty() || time.isEmpty()){
+                    Toast.makeText(AddActivity.this,
+                            "항목을 모두 입력하세요.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                showProgress();
+
+                Retrofit retrofit = NetworkClient.getRetrofitClient(AddActivity.this);
+
+                MemoApi api = retrofit.create(MemoApi.class);
+
+                // 토큰 가져온다.
+                SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+                String token = sp.getString("token", "");
+                token = "Bearer " + token;
+
+                // body 에 보낼 json 을, 자바의 객체로 생성
+                Memo memo = new Memo(title, datetime, content);
+
+                Call<Res> call = api.addMemo(token, memo);
+
+                call.enqueue(new Callback<Res>() {
+                    @Override
+                    public void onResponse(Call<Res> call, Response<Res> response) {
+                        dismissProgress();
+
+                        if(response.isSuccessful()){
+
+                            finish();
+                            return;
+
+                        }else{
+                            // 유저한테 알리고
+                            return;
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Res> call, Throwable t) {
+                        dismissProgress();
+                    }
+                });
+
+
+            }
+        });
+
     }
+
+    Dialog dialog;
+
+    private void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void dismissProgress(){
+        dialog.dismiss();
+    }
+
 }
 
 
