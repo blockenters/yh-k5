@@ -2,14 +2,18 @@ package com.block.memoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +92,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // 네트워크로 회원가입 API 를 호출한다.
 
+                // 0. 다이얼로그를 화면에 보여준다.
+                showProgress();
+
                 // 1. retrofit 변수 생성
                 Retrofit retrofit = NetworkClient.getRetrofitClient(RegisterActivity.this);
 
@@ -104,6 +111,9 @@ public class RegisterActivity extends AppCompatActivity {
                 call.enqueue(new Callback<UserRes>() {
                     @Override
                     public void onResponse(Call<UserRes> call, Response<UserRes> response) {
+
+                        dismissProgress();
+
                         // 서버에서 보낸 응답이 200 OK 일때 처리하는 코드
 
                         Log.i("AAA", "응답 code : "+response.code());
@@ -133,6 +143,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<UserRes> call, Throwable t) {
+
+                        dismissProgress();
+
                         // 유저한테 네트워크 통신 실패했다고 알려준다.
                     }
                 });
@@ -142,6 +155,24 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    // 네트워크로 데이터 처리할때 사용할 다이얼로그
+    Dialog dialog;
+
+    private void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void dismissProgress(){
+        dialog.dismiss();
+    }
+
 }
 
 
