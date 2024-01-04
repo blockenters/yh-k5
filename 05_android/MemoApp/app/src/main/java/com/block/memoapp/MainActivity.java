@@ -5,10 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.block.memoapp.config.Config;
 
 public class MainActivity extends AppCompatActivity {
+
+    ProgressBar progressBar;
+    Button btnAdd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,17 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        progressBar = findViewById(R.id.progressBar);
+        btnAdd = findViewById(R.id.btnAdd);
+
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,   );
+            }
+        });
 
     }
 }

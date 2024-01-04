@@ -13,4 +13,8 @@ public interface UserApi {
     @POST("/user/register")
     Call<UserRes> register(@Body User user);
 
+    // 로그인 API
+    @POST("/user/login")
+    Call<UserRes> login(@Body User user);
+
 }

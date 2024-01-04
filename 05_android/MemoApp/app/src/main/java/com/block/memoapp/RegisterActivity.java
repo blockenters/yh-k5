@@ -135,8 +135,19 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
 
-                        }else{
+                        }
 
+                        else if(response.code() == 400){
+
+                            Toast.makeText(RegisterActivity.this,
+                                    "이메일주소나 비번길이가 문제가 있습니다.",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (response.code() == 500){
+                            Toast.makeText(RegisterActivity.this,
+                                    "디비에 문제가 있습니다.",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
                     }
