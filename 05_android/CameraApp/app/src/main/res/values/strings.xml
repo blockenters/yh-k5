@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CameraApp</string>
+
+    <string name="alert_title">선택하세요.</string>
+
+    <string-array name="alert_photo">
+        <item>카메라 실행</item>
+        <item>앨범에서 선택</item>
+    </string-array>
+
+</resources>
