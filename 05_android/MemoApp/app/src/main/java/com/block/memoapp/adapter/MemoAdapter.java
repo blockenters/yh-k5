@@ -18,12 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.block.memoapp.MainActivity;
 import com.block.memoapp.R;
 import com.block.memoapp.UpdateActivity;
+import com.block.memoapp.api.MemoApi;
 import com.block.memoapp.api.NetworkClient;
 import com.block.memoapp.config.Config;
 import com.block.memoapp.model.Memo;
+import com.block.memoapp.model.Res;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
@@ -72,6 +77,8 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
         ImageView imgDelete;
         CardView cardView;
 
+        int index;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -98,7 +105,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
             imgDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    showAlertDialog();
                 }
             });
         }
@@ -112,7 +119,8 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    int index = getAdapterPosition();
+
+                    index = getAdapterPosition();
 
                     Memo memo = memoArrayList.get(index);
 
@@ -124,6 +132,28 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
 
                     Retrofit retrofit = NetworkClient.getRetrofitClient(context);
 
+                    MemoApi api = retrofit.create(MemoApi.class);
+
+                    Call<Res> call = api.deleteMemo(memoId, token);
+
+                    call.enqueue(new Callback<Res>() {
+                        @Override
+                        public void onResponse(Call<Res> call, Response<Res> response) {
+                            if(response.isSuccessful()){
+
+                                memoArrayList.remove(index);
+                                notifyDataSetChanged();
+
+                            }else{
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Res> call, Throwable t) {
+
+                        }
+                    });
 
                 }
             });
