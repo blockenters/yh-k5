@@ -6,6 +6,7 @@ import com.block.memoapp.model.Res;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -30,6 +31,11 @@ public interface MemoApi {
     Call<Res> updateMemo(@Path("memoId") int memoId,
                @Header("Authorization") String token,
                @Body Memo memo);
+
+    // 메모 삭제 API
+    @DELETE("/memo/{memoId}")
+    Call<Res> deleteMemo(@Path("memoId") int memoId,
+               @Header("Authorization") String token);
 
 }
 

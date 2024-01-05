@@ -1,7 +1,9 @@
 package com.block.memoapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.block.memoapp.MainActivity;
 import com.block.memoapp.R;
 import com.block.memoapp.UpdateActivity;
+import com.block.memoapp.api.NetworkClient;
+import com.block.memoapp.config.Config;
 import com.block.memoapp.model.Memo;
 
 import java.util.ArrayList;
+
+import retrofit2.Retrofit;
 
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
 
@@ -86,6 +94,40 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.ViewHolder>{
                     context.startActivity(intent);
                 }
             });
+
+            imgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
+
+
+        private void showAlertDialog(){
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("삭제");
+            builder.setMessage("정말 삭제하시겠습니까?");
+            builder.setNegativeButton("NO", null);
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    int index = getAdapterPosition();
+
+                    Memo memo = memoArrayList.get(index);
+
+                    int memoId = memo.id;
+
+                    SharedPreferences sp = context.getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                    String token = sp.getString("token", "");
+                    token = "Bearer " + token;
+
+                    Retrofit retrofit = NetworkClient.getRetrofitClient(context);
+
+
+                }
+            });
+            builder.show();
         }
     }
 }
