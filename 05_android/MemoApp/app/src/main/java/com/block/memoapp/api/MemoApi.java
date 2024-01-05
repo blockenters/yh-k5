@@ -9,6 +9,8 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MemoApi {
@@ -22,4 +24,15 @@ public interface MemoApi {
     Call<MemoList> getMemoList(@Header("Authorization") String token,
                                @Query("offset") int offset,
                                @Query("limit") int limit);
+
+    // 메모 수정 API
+    @PUT("/memo/{memoId}")
+    Call<Res> updateMemo(@Path("memoId") int memoId,
+               @Header("Authorization") String token,
+               @Body Memo memo);
+
 }
+
+
+
+

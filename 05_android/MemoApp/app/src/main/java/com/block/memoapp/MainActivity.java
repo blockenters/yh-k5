@@ -99,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         getNetworkData();
 
     }
@@ -147,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getNetworkData(){
 
+
+
         Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);
 
         MemoApi api = retrofit.create(MemoApi.class);
@@ -163,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 if(response.isSuccessful()){
+
+                    offset = 0;
+                    count = 0;
+                    memoArrayList.clear();
+
 
                     MemoList memoList = response.body();
 
