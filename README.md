@@ -92,6 +92,8 @@
 
 - 안드로이드의 카메라 / 앨범처리는 보안과도 관계가 있어서 복잡도가 있음. 기본코드 올려놨으니(android 폴더) 필요한 부분만 수정해서 사용하면 됨.
 
+- build.gradle 파일에 다음 라이브러리를 설치함 : implementation("commons-io:commons-io:2.4")
+
 - 안드로이드 카메라/갤러리 처리 : https://docs.google.com/presentation/d/1vGdoKS1amPNqYR416mFtNaxwy6NbtwPljz9Ty1qdCiw/edit?usp=sharing
 
 - 우리서버의 포스팅앱 : https://docs.google.com/presentation/d/1wKcb0QAeAdUY4W8YHZZaUhARrmrYMdyWSHvhfNPZZ0U/edit?usp=sharing
