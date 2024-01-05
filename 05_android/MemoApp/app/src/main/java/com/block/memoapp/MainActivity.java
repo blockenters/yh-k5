@@ -1,5 +1,6 @@
 package com.block.memoapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     // 페이징 처리를 위한 변수들
     int offset = 0;
-    int limit = 7;
+    int limit = 8;
+    int count = 0;
 
     // 리사이클러뷰 관련 변수들
     RecyclerView recyclerView;
@@ -69,6 +71,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int totalCount = recyclerView.getAdapter().getItemCount();
+
+                if(lastPosition + 1 == totalCount){
+                    // 네트워크 통해서 데이터를 더 불러온다.
+                    if( limit == count){
+                        // DB에 데이터가 더 존재할수 있으니까, 데이터를 불러온다.
+                        addNetworkData();
+                    }
+                }
+            }
+        });
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +100,48 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getNetworkData();
+
+    }
+
+    private void addNetworkData() {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);
+        MemoApi api = retrofit.create(MemoApi.class);
+        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+        String token = sp.getString("token", "");
+        token = "Bearer " + token;
+
+        offset = offset + count;
+
+        Call<MemoList> call = api.getMemoList(token, offset, limit);
+
+        call.enqueue(new Callback<MemoList>() {
+            @Override
+            public void onResponse(Call<MemoList> call, Response<MemoList> response) {
+                progressBar.setVisibility(View.GONE);
+
+                if(response.isSuccessful()){
+
+                    MemoList memoList = response.body();
+
+                    memoArrayList.addAll( memoList.items );
+
+                    count = memoList.count;
+
+                    adapter.notifyDataSetChanged();
+
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MemoList> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
 
     }
 
@@ -106,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
                     MemoList memoList = response.body();
 
                     memoArrayList.addAll( memoList.items );
+
+                    count = memoList.count;
 
                     // 어댑터 만들어서, 리사이클러뷰에 적용
                     adapter = new MemoAdapter(MainActivity.this, memoArrayList);
