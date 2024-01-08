@@ -1,5 +1,6 @@
 package com.block.postingapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +66,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int totalCount = recyclerView.getAdapter().getItemCount();
+
+                if(lastPosition + 1 == totalCount){
+
+                    if(count == limit){
+                        addNetworkData();
+                    }
+                }
+
+            }
+        });
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +95,51 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getNetworkData();
+
+    }
+
+    private void addNetworkData() {
+
+        offset = offset + count;
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        // 네트워크로 API 호출한다.
+        Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);
+
+        PostingApi api = retrofit.create(PostingApi.class);
+
+        token = "Bearer " + token;
+
+        Call<PostingList> call = api.getFriendPosting(token, offset, limit);
+
+        call.enqueue(new Callback<PostingList>() {
+            @Override
+            public void onResponse(Call<PostingList> call, Response<PostingList> response) {
+                progressBar.setVisibility(View.GONE);
+
+                if(response.isSuccessful()){
+
+                    PostingList postingList = response.body();
+
+                    count = postingList.count;
+
+                    postingArrayList.addAll( postingList.items );
+
+                    adapter.notifyDataSetChanged();
+
+
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostingList> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
 
     }
 
