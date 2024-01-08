@@ -1,6 +1,7 @@
 package com.block.postingapp.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.block.postingapp.R;
+import com.block.postingapp.api.LikeApi;
+import com.block.postingapp.api.NetworkClient;
+import com.block.postingapp.config.Config;
 import com.block.postingapp.model.Posting;
+import com.block.postingapp.model.Res;
 import com.bumptech.glide.Glide;
 
 import java.text.ParseException;
@@ -19,6 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class PostingAdapter extends RecyclerView.Adapter<PostingAdapter.ViewHolder> {
 
@@ -88,6 +98,8 @@ public class PostingAdapter extends RecyclerView.Adapter<PostingAdapter.ViewHold
         TextView txtCreatedAt;
         ImageView imgLike;
 
+        Posting posting;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -96,6 +108,74 @@ public class PostingAdapter extends RecyclerView.Adapter<PostingAdapter.ViewHold
             txtEmail = itemView.findViewById(R.id.txtEmail);
             txtCreatedAt = itemView.findViewById(R.id.txtCreatedAt);
             imgLike = itemView.findViewById(R.id.imgLike);
+
+            imgLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // 1. 어떤 포스팅을 좋아요 눌렀는지 확인.
+                    int index = getAdapterPosition();
+
+                    posting = postingArrayList.get(index);
+
+                    // 2. 해당 포스팅의 좋아요가 어떤 상태인지 확인후
+                    //    좋아요가 되어있으면, 좋아요 해제
+                    //    그렇지 않으면, 좋아요 실행.
+
+                    Retrofit retrofit = NetworkClient.getRetrofitClient(context);
+
+                    LikeApi api = retrofit.create(LikeApi.class);
+
+                    SharedPreferences sp = context.getSharedPreferences(Config.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                    String token = sp.getString("token", "");
+                    token = "Bearer " + token;
+
+                    if(posting.isLike == 0){
+                        // 좋아요 API
+                        Call<Res> call = api.setLike(posting.postId, token);
+                        call.enqueue(new Callback<Res>() {
+                            @Override
+                            public void onResponse(Call<Res> call, Response<Res> response) {
+                                if(response.isSuccessful()){
+
+                                    posting.isLike = 1;
+                                    notifyDataSetChanged();
+
+                                }else{
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Res> call, Throwable t) {
+
+                            }
+                        });
+                    }else{
+                        // 좋아요 해지 API
+                        Call<Res> call = api.deleteLike(posting.postId, token);
+                        call.enqueue(new Callback<Res>() {
+                            @Override
+                            public void onResponse(Call<Res> call, Response<Res> response) {
+                                if(response.isSuccessful()){
+
+                                    posting.isLike = 0;
+                                    notifyDataSetChanged();
+
+                                }else{
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Res> call, Throwable t) {
+
+                            }
+                        });
+                    }
+
+                }
+            });
 
         }
     }
