@@ -9,13 +9,17 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +32,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.block.postingapp.api.NetworkClient;
+import com.block.postingapp.api.PostingApi;
+import com.block.postingapp.config.Config;
+import com.block.postingapp.model.Res;
 
 import org.apache.commons.io.IOUtils;
 
@@ -39,6 +49,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -62,6 +80,62 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDialog();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String content = editContent.getText().toString().trim();
+
+                if(photoFile == null || content.isEmpty()){
+                    Toast.makeText(AddActivity.this,
+                            "사진과 내용을 모두 입력하세요.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 네트워크로 API 호출
+                showProgress();
+
+                Retrofit retrofit = NetworkClient.getRetrofitClient(AddActivity.this);
+
+                PostingApi api = retrofit.create(PostingApi.class);
+
+                SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+                String token = sp.getString("token", "");
+                token = "Bearer " + token;
+
+                // 보낼 파일
+                RequestBody fileBody = RequestBody.create(photoFile, MediaType.parse("image/jpg"));
+                MultipartBody.Part image = MultipartBody.Part.createFormData("image", photoFile.getName(), fileBody);
+
+                // 보낼 텍스트
+                RequestBody textBody = RequestBody.create(content, MediaType.parse("text/plain"));
+
+                Call<Res> call = api.addPosting(token, image, textBody);
+
+                call.enqueue(new Callback<Res>() {
+                    @Override
+                    public void onResponse(Call<Res> call, Response<Res> response) {
+                        dismissProgress();
+
+                        if(response.isSuccessful()){
+
+                            finish();
+
+                        }else{
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Res> call, Throwable t) {
+                        dismissProgress();
+                    }
+                });
+
             }
         });
     }
@@ -337,6 +411,21 @@ public class AddActivity extends AppCompatActivity {
         }else{
             return true;
         }
+    }
+
+    Dialog dialog;
+
+    void showProgress(){
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(new ProgressBar(this));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    void dismissProgress(){
+        dialog.dismiss();
     }
 
 }
