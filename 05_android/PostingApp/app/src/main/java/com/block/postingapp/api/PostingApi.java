@@ -28,4 +28,14 @@ public interface PostingApi {
                                        @Query("offset") int offset,
                                        @Query("limit") int limit);
 
+    // 내 포스팅 리스트 가져오는 API
+    @GET("/posting/me")
+    Call<PostingList> getMyPosting(@Header("Authorization") String token,
+                 @Query("offset") int offset,
+                 @Query("limit") int limit);
 }
+
+
+
+
+

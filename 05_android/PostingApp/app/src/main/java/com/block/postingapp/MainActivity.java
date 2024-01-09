@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         PostingApi api = retrofit.create(PostingApi.class);
 
-        Call<PostingList> call = api.getFriendPosting(token, offset, limit);
+        Call<PostingList> call = api.getMyPosting(token, offset, limit);
 
         call.enqueue(new Callback<PostingList>() {
             @Override
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         token = "Bearer " + token;
 
-        Call<PostingList> call = api.getFriendPosting(token, offset, limit);
+        Call<PostingList> call = api.getMyPosting(token, offset, limit);
 
         call.enqueue(new Callback<PostingList>() {
             @Override
