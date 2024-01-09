@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,9 +17,11 @@ import android.widget.ProgressBar;
 import com.block.postingapp.adapter.PostingAdapter;
 import com.block.postingapp.api.NetworkClient;
 import com.block.postingapp.api.PostingApi;
+import com.block.postingapp.api.UserApi;
 import com.block.postingapp.config.Config;
 import com.block.postingapp.model.Posting;
 import com.block.postingapp.model.PostingList;
+import com.block.postingapp.model.Res;
 
 import java.util.ArrayList;
 
@@ -109,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         PostingApi api = retrofit.create(PostingApi.class);
 
-        token = "Bearer " + token;
-
         Call<PostingList> call = api.getFriendPosting(token, offset, limit);
 
         call.enqueue(new Callback<PostingList>() {
@@ -193,7 +195,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int itemId = item.getItemId();
+
+        if(itemId == R.id.menuLogout){
+            Retrofit retrofit = NetworkClient.getRetrofitClient(MainActivity.this);
+            UserApi api = retrofit.create(UserApi.class);
+
+            Call<Res> call = api.logout(token);
+
+            call.enqueue(new Callback<Res>() {
+                @Override
+                public void onResponse(Call<Res> call, Response<Res> response) {
+                    if(response.isSuccessful()){
+
+                        // 쉐어드프리퍼런스의 token 을 없애야 한다.
+                        SharedPreferences sp = getSharedPreferences(Config.PREFERENCE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("token", "");
+                        editor.apply();
+
+                        // 로그인액티비티를 띄우고 메인종료!
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+
+                        finish();
+
+                    }else{
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Res> call, Throwable t) {
+
+                }
+            });
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
